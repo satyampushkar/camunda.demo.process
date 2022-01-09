@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_06ce56a" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.9.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
+  <bpmn:process id="Process_Check_Items_Availability" name="Check Items Availability Process" isExecutable="true">
+    <bpmn:startEvent id="Event_1szx5jc" name="Start Check Items Availability Process">
+      <bpmn:outgoing>Flow_0jggfmc</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="Activity_1alts8z" name="Check availability of water, tea leaves etc " camunda:type="external" camunda:topic="Check_Items_Availability">
+      <bpmn:incoming>Flow_0jggfmc</bpmn:incoming>
+      <bpmn:outgoing>Flow_1sg7c44</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="Event_04msfbp">
+      <bpmn:incoming>Flow_1vmpzgy</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="Event_0nugy3z" name="ItemsNotAvailable">
+      <bpmn:incoming>Flow_1pejf3h</bpmn:incoming>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_0ibd1qr" errorRef="Error_10r36lv" />
+    </bpmn:endEvent>
+    <bpmn:exclusiveGateway id="Gateway_1gjvlt0" name="Are items avaialable?">
+      <bpmn:incoming>Flow_1sg7c44</bpmn:incoming>
+      <bpmn:outgoing>Flow_1vmpzgy</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1pejf3h</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0jggfmc" sourceRef="Event_1szx5jc" targetRef="Activity_1alts8z" />
+    <bpmn:sequenceFlow id="Flow_1sg7c44" sourceRef="Activity_1alts8z" targetRef="Gateway_1gjvlt0" />
+    <bpmn:sequenceFlow id="Flow_1vmpzgy" name="yes" sourceRef="Gateway_1gjvlt0" targetRef="Event_04msfbp">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${itemsAvailable==true}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1pejf3h" name="no" sourceRef="Gateway_1gjvlt0" targetRef="Event_0nugy3z">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!(itemsAvailable==true)}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+  </bpmn:process>
+  <bpmn:error id="Error_10r36lv" name="ItemsNotAvailable" errorCode="ItemsNotAvailable" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_Check_Items_Availability">
+      <bpmndi:BPMNEdge id="Flow_0jggfmc_di" bpmnElement="Flow_0jggfmc">
+        <di:waypoint x="218" y="140" />
+        <di:waypoint x="273" y="140" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1sg7c44_di" bpmnElement="Flow_1sg7c44">
+        <di:waypoint x="373" y="140" />
+        <di:waypoint x="428" y="140" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1vmpzgy_di" bpmnElement="Flow_1vmpzgy">
+        <di:waypoint x="478" y="140" />
+        <di:waypoint x="535" y="140" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="499" y="122" width="17" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1pejf3h_di" bpmnElement="Flow_1pejf3h">
+        <di:waypoint x="453" y="165" />
+        <di:waypoint x="453" y="253" />
+        <di:waypoint x="535" y="253" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="462" y="206" width="13" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_1szx5jc_di" bpmnElement="Event_1szx5jc">
+        <dc:Bounds x="182" y="122" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="159" y="165" width="88" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1alts8z_di" bpmnElement="Activity_1alts8z">
+        <dc:Bounds x="273" y="100" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_04msfbp_di" bpmnElement="Event_04msfbp">
+        <dc:Bounds x="535" y="122" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0nugy3z_di" bpmnElement="Event_0nugy3z">
+        <dc:Bounds x="535" y="235" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="511" y="278" width="89" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1gjvlt0_di" bpmnElement="Gateway_1gjvlt0" isMarkerVisible="true">
+        <dc:Bounds x="428" y="115" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="425" y="78" width="56" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

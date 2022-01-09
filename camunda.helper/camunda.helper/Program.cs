@@ -21,7 +21,9 @@ builder.Services.AddExternalTaskClient()
 builder.Services.AddCamundaWorker("PrepareTeaCamundaWorker", 1)
     .AddHandler<BoilWaterHandler>()
     .AddHandler<AddTeaLeavesHandler>()
-    .AddHandler<StrainAndServeHandler>();
+    .AddHandler<StrainAndServeHandler>()
+    .AddHandler<CheckItemsAvailabilityHandler>()
+    .AddHandler<InformInventoryHandler>();
 //
 
 var app = builder.Build();
