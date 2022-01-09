@@ -24,9 +24,10 @@ namespace camunda.helper.Controllers
                 Random random = new Random();
                 int numberOfCups = random.Next(1, 10);
 
+                //Creating process parameters
                 var processParams = new StartProcessInstance()
                     .SetVariable("numberOfCups", random.Next(1, 10));
-
+                //Startinng the process
                 var proceStartResult = await _client.ProcessDefinitions.ByKey("Process_Prepare_Tea")
                     .StartProcessInstance(processParams);
 
