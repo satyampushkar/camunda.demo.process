@@ -15,11 +15,6 @@
       <bpmn:incoming>Flow_1pejf3h</bpmn:incoming>
       <bpmn:errorEventDefinition id="ErrorEventDefinition_0ibd1qr" errorRef="Error_10r36lv" />
     </bpmn:endEvent>
-    <bpmn:exclusiveGateway id="Gateway_1gjvlt0" name="Are items avaialable?">
-      <bpmn:incoming>Flow_1sg7c44</bpmn:incoming>
-      <bpmn:outgoing>Flow_1vmpzgy</bpmn:outgoing>
-      <bpmn:outgoing>Flow_1pejf3h</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="Flow_0jggfmc" sourceRef="Event_1szx5jc" targetRef="Activity_1alts8z" />
     <bpmn:sequenceFlow id="Flow_1sg7c44" sourceRef="Activity_1alts8z" targetRef="Gateway_1gjvlt0" />
     <bpmn:sequenceFlow id="Flow_1vmpzgy" name="yes" sourceRef="Gateway_1gjvlt0" targetRef="Event_04msfbp">
@@ -28,17 +23,22 @@
     <bpmn:sequenceFlow id="Flow_1pejf3h" name="no" sourceRef="Gateway_1gjvlt0" targetRef="Event_0nugy3z">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!(itemsAvailable==true)}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
+    <bpmn:exclusiveGateway id="Gateway_1gjvlt0" name="Are items avaialable?">
+      <bpmn:incoming>Flow_1sg7c44</bpmn:incoming>
+      <bpmn:outgoing>Flow_1pejf3h</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1vmpzgy</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
   </bpmn:process>
   <bpmn:error id="Error_10r36lv" name="ItemsNotAvailable" errorCode="ItemsNotAvailable" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_Check_Items_Availability">
-      <bpmndi:BPMNEdge id="Flow_0jggfmc_di" bpmnElement="Flow_0jggfmc">
-        <di:waypoint x="218" y="140" />
-        <di:waypoint x="273" y="140" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1sg7c44_di" bpmnElement="Flow_1sg7c44">
-        <di:waypoint x="373" y="140" />
-        <di:waypoint x="428" y="140" />
+      <bpmndi:BPMNEdge id="Flow_1pejf3h_di" bpmnElement="Flow_1pejf3h">
+        <di:waypoint x="453" y="165" />
+        <di:waypoint x="453" y="253" />
+        <di:waypoint x="535" y="253" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="462" y="206" width="13" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1vmpzgy_di" bpmnElement="Flow_1vmpzgy">
         <di:waypoint x="478" y="140" />
@@ -47,13 +47,13 @@
           <dc:Bounds x="499" y="122" width="17" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1pejf3h_di" bpmnElement="Flow_1pejf3h">
-        <di:waypoint x="453" y="165" />
-        <di:waypoint x="453" y="253" />
-        <di:waypoint x="535" y="253" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="462" y="206" width="13" height="14" />
-        </bpmndi:BPMNLabel>
+      <bpmndi:BPMNEdge id="Flow_1sg7c44_di" bpmnElement="Flow_1sg7c44">
+        <di:waypoint x="373" y="140" />
+        <di:waypoint x="428" y="140" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0jggfmc_di" bpmnElement="Flow_0jggfmc">
+        <di:waypoint x="218" y="140" />
+        <di:waypoint x="273" y="140" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Event_1szx5jc_di" bpmnElement="Event_1szx5jc">
         <dc:Bounds x="182" y="122" width="36" height="36" />
