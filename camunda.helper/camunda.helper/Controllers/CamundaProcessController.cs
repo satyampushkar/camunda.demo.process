@@ -25,8 +25,23 @@ namespace camunda.helper.Controllers
                 int numberOfCups = random.Next(1, 10);
 
                 //Creating process parameters
-                var processParams = new StartProcessInstance()
-                    .SetVariable("numberOfCups", random.Next(1, 10));
+                StartProcessInstance processParams;
+                if (myBPMNProcess.Equals(MyBPMNProcess.Process_Transaction_Saga_Orchestrator))
+                {
+                    // 0 => no exception
+                    // 1=> exception in 'Create Order'
+                    // 2=> exception in 'Process Payment'
+                    // 3=> exception in 'Update Inventory'
+                    // 4=> exception in 'Deliver Order'
+                    processParams = new StartProcessInstance()
+                       .SetVariable("exceptionInProcess", random.Next(0, 4));
+                }
+                else
+                {
+                    processParams = new StartProcessInstance()
+                        .SetVariable("numberOfCups", random.Next(1, 10));
+                }
+                
                 //Startinng the process
                 var proceStartResult = await _client.ProcessDefinitions.ByKey(myBPMNProcess.ToString())
                     .StartProcessInstance(processParams);
@@ -93,6 +108,7 @@ namespace camunda.helper.Controllers
     public enum MyBPMNProcess
     {
         Process_Prepare_Tea,
-        Process_Check_Items_Availability
+        Process_Check_Items_Availability,
+        Process_Transaction_Saga_Orchestrator
     }
 }
