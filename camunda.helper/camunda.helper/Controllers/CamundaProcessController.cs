@@ -1,7 +1,9 @@
-﻿using Camunda.Api.Client;
+﻿using camunda.helper.Models;
+using Camunda.Api.Client;
 using Camunda.Api.Client.ProcessDefinition;
 using Camunda.Api.Client.UserTask;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace camunda.helper.Controllers
 {
@@ -28,13 +30,28 @@ namespace camunda.helper.Controllers
                 StartProcessInstance processParams;
                 if (myBPMNProcess.Equals(MyBPMNProcess.Process_Transaction_Saga_Orchestrator))
                 {
+                    OrderPostModel orderPostModel = new OrderPostModel
+                    {
+                        orders = new List<OrderData>()
+                    };
+                    //Creating random products for ordering
+                    for (int i = 0; i < random.Next(1, 3); i++)
+                    {
+                        orderPostModel.orders.Add(new OrderData
+                        {
+                            productId = random.Next(121, 125),
+                            unitPrice = random.Next(50, 500),
+                            units = random.Next(1, 10)
+                        });
+                    }
                     // 0 => no exception
                     // 1=> exception in 'Create Order'
                     // 2=> exception in 'Process Payment'
                     // 3=> exception in 'Update Inventory'
                     // 4=> exception in 'Deliver Order'
                     processParams = new StartProcessInstance()
-                       .SetVariable("exceptionInProcess", random.Next(0, 4));
+                       .SetVariable("exceptionInProcess", random.Next(0, 4))
+                       .SetVariable("OrderPostModel", JsonConvert.SerializeObject(orderPostModel.orders));
                 }
                 else
                 {

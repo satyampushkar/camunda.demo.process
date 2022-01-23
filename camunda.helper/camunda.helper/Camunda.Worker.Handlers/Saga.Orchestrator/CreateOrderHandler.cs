@@ -1,31 +1,52 @@
-﻿using Camunda.Worker;
+﻿using camunda.helper.Models;
+using Camunda.Worker;
+using Newtonsoft.Json;
+using System.Net.Http.Headers;
 
 namespace camunda.helper.Camunda.Worker.Handlers.Saga.Orchestrator
 {
 
     [HandlerTopics("Create_Order")]
-    [HandlerVariables(new string[] { "exceptionInProcess" })]
+    [HandlerVariables(new string[] { "exceptionInProcess", "OrderPostModel" })]
     public class CreateOrderHandler : IExternalTaskHandler
     {
         private readonly ILogger<CreateOrderHandler> _logger;
-        public CreateOrderHandler(ILogger<CreateOrderHandler> logger)
+        private readonly IHttpClientFactory _httpClientFactory;
+        public CreateOrderHandler(ILogger<CreateOrderHandler> logger, IHttpClientFactory httpClientFactory)
         {
             _logger = logger;
+            _httpClientFactory = httpClientFactory;
         }
         public async Task<IExecutionResult> HandleAsync(ExternalTask externalTask, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Create_Order handler is called from Camunda...");
             try
             {
-                //_logger.LogInformation($"Adding Tea leaves for {externalTask.Variables["numberOfCups"].AsInteger()} number of cups..........");
+                _logger.LogInformation($"Creating Order..........");
                 ////Mimicking operation
-                //Task.Delay(5000).Wait();
+
+                var httpClient = _httpClientFactory.CreateClient();
+                var orderData = externalTask.Variables["OrderPostModel"].AsString();
+                var content = new StringContent(orderData);
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                var response = await httpClient.PostAsync("http://localhost:3001/order", content);
+
+                response.EnsureSuccessStatusCode();
+                var result = await response.Content.ReadAsStringAsync();
+                var orderId = JsonConvert.DeserializeObject<string>(result);
+
                 if (externalTask.Variables["exceptionInProcess"].AsInteger() == 1)
                 {
                     throw new NotImplementedException();
                 }
                 //return success
-                return new CompleteResult();
+                return new CompleteResult 
+                {
+                    Variables = new Dictionary<string, Variable>
+                    {
+                        ["orderId"] = new Variable(orderId, VariableType.String)
+                    }
+                };
             }
             catch (Exception ex)
             {

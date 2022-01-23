@@ -1,0 +1,54 @@
+version: '3.4'
+
+services:
+  order-service:
+    # image: order-service-api:latest
+    build:
+      context: .
+      dockerfile: order.microservice/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      # - PATH_BASE=/order-api
+      # - PORT=3001
+    ports: 
+      - "3001:80"
+      - "3031:443"
+
+  payment-service:
+    # image: payment-service-api:latest
+    build:
+      context: .
+      dockerfile: payment.microservice/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      # - PATH_BASE=/inventory-api
+      # - PORT=3002
+    ports: 
+      - "3002:80"
+      - "3032:443"
+
+  inventory-service:
+    # image: inventory-service-api:latest
+    build:
+      context: .
+      dockerfile: inventory.microservice/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      # - PATH_BASE=/inventory-api
+      # - PORT=3003
+    ports: 
+      - "3003:80"
+      - "3033:443"
+
+  delivery-service:
+    # image: delivery-service-api:latest
+    build:
+      context: .
+      dockerfile: delivery.microservice/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      # - PATH_BASE=/delivery-api
+      # - PORT=3004
+    ports: 
+      - "3004:80"
+      - "3034:443"

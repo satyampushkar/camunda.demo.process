@@ -3,12 +3,15 @@
 namespace camunda.helper.Camunda.Worker.Handlers.Saga.Orchestrator
 {
     [HandlerTopics("Cancel_Delivery")]
+    [HandlerVariables(new string[] { "orderId" })]
     public class CancelDeliveryHandler : IExternalTaskHandler
     {
         private readonly ILogger<CancelDeliveryHandler> _logger;
-        public CancelDeliveryHandler(ILogger<CancelDeliveryHandler> logger)
+        private readonly IHttpClientFactory _httpClientFactory;
+        public CancelDeliveryHandler(ILogger<CancelDeliveryHandler> logger, IHttpClientFactory httpClientFactory)
         {
             _logger = logger;
+            _httpClientFactory = httpClientFactory;
         }
         public async Task<IExecutionResult> HandleAsync(ExternalTask externalTask, CancellationToken cancellationToken)
         {
@@ -17,7 +20,12 @@ namespace camunda.helper.Camunda.Worker.Handlers.Saga.Orchestrator
             {
                 //_logger.LogInformation($"Adding Tea leaves for {externalTask.Variables["numberOfCups"].AsInteger()} number of cups..........");
                 ////Mimicking operation
-                //Task.Delay(5000).Wait();
+                var httpClient = _httpClientFactory.CreateClient();
+                var orderId = externalTask.Variables["orderId"].AsString();
+
+                var response = await httpClient.DeleteAsync("http://localhost:3004/delivery/" + orderId);
+
+                response.EnsureSuccessStatusCode();
 
                 //return success
                 return new CompleteResult();

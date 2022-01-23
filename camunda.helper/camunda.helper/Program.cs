@@ -14,6 +14,8 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddHttpClient();
+
 //Camunda worker startUp
 builder.Services.AddExternalTaskClient()
     .ConfigureHttpClient((provider, client) =>
