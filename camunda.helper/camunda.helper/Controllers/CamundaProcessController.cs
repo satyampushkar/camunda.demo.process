@@ -52,18 +52,22 @@ namespace camunda.helper.Controllers
                     processParams = new StartProcessInstance()
                        .SetVariable("exceptionInProcess", random.Next(0, 4))
                        .SetVariable("OrderPostModel", JsonConvert.SerializeObject(orderPostModel.orders));
+
+                    _logger.LogInformation($"Camunda process to demonstrate Saga based orchestrator started..........");
                 }
                 else
                 {
                     processParams = new StartProcessInstance()
                         .SetVariable("numberOfCups", random.Next(1, 10));
+
+                    _logger.LogInformation($"Camunda process to prepare tea started. Preaparing {numberOfCups} cup(s) of tea.........");
                 }
                 
                 //Startinng the process
                 var proceStartResult = await _client.ProcessDefinitions.ByKey(myBPMNProcess.ToString())
                     .StartProcessInstance(processParams);
 
-                _logger.LogInformation($"Camunda process: {proceStartResult.Id} to prepare tea started. Preaparing {numberOfCups} cup(s) of tea.........");
+                
 
                 return Ok(proceStartResult.Id);
             }
