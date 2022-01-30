@@ -24,7 +24,6 @@ namespace camunda.helper.Controllers
             try
             {
                 Random random = new Random();
-                int numberOfCups = random.Next(1, 10);
 
                 //Creating process parameters
                 StartProcessInstance processParams;
@@ -57,8 +56,9 @@ namespace camunda.helper.Controllers
                 }
                 else
                 {
+                    int numberOfCups = random.Next(1, 10);
                     processParams = new StartProcessInstance()
-                        .SetVariable("numberOfCups", random.Next(1, 10));
+                        .SetVariable("numberOfCups", numberOfCups);
 
                     _logger.LogInformation($"Camunda process to prepare tea started. Preaparing {numberOfCups} cup(s) of tea.........");
                 }
